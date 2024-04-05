@@ -7,17 +7,21 @@
         mc:Ignorable="d"
         Title="RizvanovLanguage" Height="800" Width="1200" MinHeight="800" MinWidth="1300" FontFamily="Comic Sans MS" Icon="res/school_logo.ico">
     <Grid Background="#FFE7FABF">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="24*"/>
+            <ColumnDefinition Width="299*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="150"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Image Source="res/school_logo.png" HorizontalAlignment="Left" Margin="10"/>
+        <Image Source="res/school_logo.png" HorizontalAlignment="Left" Margin="10,10,0,10" Grid.ColumnSpan="2"/>
 
-        <TextBlock Text="Языковая Школа" FontFamily="Comic Sans MS" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="Языковая Школа" FontFamily="Comic Sans MS" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Margin="431,54,527,54"/>
 
-        <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden" ContentRendered="MainFrame_ContentRendered"/>
+        <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden" ContentRendered="MainFrame_ContentRendered" Grid.ColumnSpan="2"/>
     </Grid>
 
 </Window>

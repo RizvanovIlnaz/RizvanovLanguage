@@ -35,7 +35,9 @@ namespace RizvanovLanguage
 
             ClientListView.ItemsSource = currentClients;
 
+            FiltrBox.SelectedIndex = 0;
             strCount.SelectedIndex = 0;
+            SortBox.SelectedIndex = 0;
             TBAllRecords.Text = RizvanovLanguageEntities.GetContext().Client.ToList().Count().ToString();
             Update();
         }
@@ -44,8 +46,31 @@ namespace RizvanovLanguage
         {
             var currentClient = RizvanovLanguageEntities.GetContext().Client.ToList();
 
-            TBAllRecords.Text = RizvanovLanguageEntities.GetContext().Client.ToList().Count().ToString();
-            TBCount.Text = currentClient.Count().ToString();
+            if (SortBox.SelectedIndex == 1)
+            {
+                currentClient = currentClient.OrderBy(p => p.FirstName).ToList();
+            }
+            else if (SortBox.SelectedIndex == 2)
+            {
+                currentClient = currentClient.OrderByDescending(p => DateTime.TryParse(p.LastVisitDate, out DateTime visitDate) ? visitDate : DateTime.MinValue).ToList();
+            }
+            else if (SortBox.SelectedIndex == 3)
+            {
+                currentClient = currentClient.OrderByDescending(p => p.VisitCount).ToList();
+            }
+
+            
+
+            if (FiltrBox.SelectedIndex == 1)
+            {
+                currentClient = currentClient.Where(p => p.GenderCode == "ж").ToList();
+            }
+            else if (FiltrBox.SelectedIndex == 2)
+            {
+                currentClient = currentClient.Where(p => p.GenderCode == "м").ToList();
+            }
+
+            currentClient = currentClient.Where(p => p.LastName.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.FirstName.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Patronymic.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Email.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Phone.Replace("+", "").Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").ToLower().Contains(TBoxSearch.Text.Replace("+", "").Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").ToLower())).ToList();
 
             ClientListView.ItemsSource = currentClient;
 
@@ -148,9 +173,9 @@ namespace RizvanovLanguage
                     }
                     PageListBox.SelectedIndex = CurrentPage;
 
-                    min = CurrentPage * CountInPage + CountInPage < CountRecords ? CurrentPage * CountInPage + CountInPage : CountRecords;
-                    TBCount.Text = min.ToString();
-                    TBAllRecords.Text = CountRecords.ToString();
+                    //min = CurrentPage * CountInPage + CountInPage < CountRecords ? CurrentPage * CountInPage + CountInPage : CountRecords;
+                    //TBCount.Text = min.ToString();
+                    //TBAllRecords.Text = CountRecords.ToString();
 
                     ClientListView.ItemsSource = CurrentPageList;
 
@@ -203,6 +228,21 @@ namespace RizvanovLanguage
             {
                 MessageBox.Show("Невозможно выполнить удаление, так как клиент посещал школу!");
             }
+        }
+
+        private void SortBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Update();
+        }
+
+        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Update();
+        }
+
+        private void FiltrBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Update();
         }
     }
 }
